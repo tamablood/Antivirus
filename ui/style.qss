@@ -117,7 +117,8 @@ QStackedWidget#stacked_pages > QWidget {
 QLabel#lbl_home_title,
 QLabel#lbl_file_title,
 QLabel#lbl_folder_title,
-QLabel#lbl_ip_title {
+QLabel#lbl_ip_title,
+QLabel#lbl_behavior_title {
     color: #00d4ff;
     font-size: 24px;
     font-weight: bold;
@@ -140,7 +141,9 @@ QLabel#lbl_folder_log,
 QLabel#lbl_ip_log,
 QLabel#lbl_file_report,
 QLabel#lbl_folder_report,
-QLabel#lbl_ip_report {
+QLabel#lbl_ip_report,
+QLabel#lbl_behavior_log,
+QLabel#lbl_behavior_alerts {
     color: #00d4ff;
     font-size: 13px;
     font-weight: bold;
@@ -149,12 +152,58 @@ QLabel#lbl_ip_report {
 }
 
 /* ========================================
+   BEHAVIOR PAGE SPECIFIC
+   ======================================== */
+
+/* GroupBoxes */
+QGroupBox {
+    color: #e0e6ed;
+    border: 2px solid #2d3748;
+    border-radius: 8px;
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    left: 10px;
+    padding: 0 5px;
+    color: #00a8cc; /* Cyan title */
+}
+
+/* Labels inside stats group */
+QLabel#lbl_stat_created,
+QLabel#lbl_stat_modified,
+QLabel#lbl_stat_deleted,
+QLabel#lbl_behavior_status {
+    color: #e0e6ed; /* Fallback text color */
+    font-weight: bold;
+}
+
+/* ListWidget for Alerts */
+QListWidget#list_behavior_alerts {
+    background-color: rgba(5, 10, 20, 0.95);
+    color: #e0e6ed;
+    border: 2px solid #ef4444; /* Red border to signify alerts */
+    border-radius: 8px;
+    padding: 5px;
+}
+
+QTextEdit#txt_behavior_log {
+    background-color: rgba(5, 10, 20, 0.95);
+    color: #00ff41; /* Terminal green */
+    border: 2px solid #00a8cc;
+}
+
+/* ========================================
    FRAMES DE SÉLECTION
    ======================================== */
 
 QFrame#frame_file_selection,
 QFrame#frame_folder_selection,
-QFrame#frame_ip_selection {
+QFrame#frame_ip_selection,
+QFrame#frame_behavior_selection {
     background: rgba(26, 31, 58, 0.9);
     border: 2px solid #00a8cc;
     border-radius: 10px;
@@ -167,7 +216,8 @@ QFrame#frame_ip_selection {
 
 /* Boutons de sélection (bleu) */
 QPushButton#btn_select_file,
-QPushButton#btn_select_folder {
+QPushButton#btn_select_folder,
+QPushButton#btn_select_behavior_folder {
     background: qlineargradient(
         x1:0, y1:0, x2:0, y2:1,
         stop:0 #0077b6,
@@ -182,7 +232,8 @@ QPushButton#btn_select_folder {
 }
 
 QPushButton#btn_select_file:hover,
-QPushButton#btn_select_folder:hover {
+QPushButton#btn_select_folder:hover,
+QPushButton#btn_select_behavior_folder:hover {
     background: qlineargradient(
         x1:0, y1:0, x2:0, y2:1,
         stop:0 #0096c7,
@@ -191,7 +242,8 @@ QPushButton#btn_select_folder:hover {
 }
 
 QPushButton#btn_select_file:pressed,
-QPushButton#btn_select_folder:pressed {
+QPushButton#btn_select_folder:pressed,
+QPushButton#btn_select_behavior_folder:pressed {
     background: #005280;
 }
 
@@ -311,6 +363,7 @@ QScrollBar::handle:vertical {
 
 QScrollBar::handle:vertical:hover {
     background: #00d4ff;
+    border-radius: 6px;
 }
 
 QScrollBar::add-line:vertical,
@@ -332,6 +385,7 @@ QScrollBar::handle:horizontal {
 
 QScrollBar::handle:horizontal:hover {
     background: #00d4ff;
+    border-radius: 6px;
 }
 
 /* ========================================
@@ -350,5 +404,3 @@ QPushButton#btn_scan_folder:hover,
 QPushButton#btn_scan_ip:hover {
     border: 2px solid rgba(0, 255, 255, 0.6);
 }
-
-
