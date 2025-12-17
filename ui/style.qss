@@ -1,0 +1,354 @@
+/* ========================================
+   STYLE GLOBAL - DARK MODE CYBERSECURITY
+   ======================================== */
+
+QMainWindow {
+    background-color: #0a0e27;
+}
+QWidget#page_home {
+    background-image: url(im.jpg);
+    background-position: center;
+    background-size: cover;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgba(10,25,41,0.9), stop:0.5 rgba(42,159,214,0.7), stop:1 rgba(13,31,53,0.9));
+}
+
+QWidget#centralwidget {
+    background-image: url(im.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* Alternative si tu veux un dégradé au lieu d'image */
+
+QWidget#centralwidget {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #0a0e27,
+        stop:0.5 #1a1f3a,
+        stop:1 #0d1b2a
+    );
+}
+
+
+/* ========================================
+   SIDEBAR
+   ======================================== */
+
+QFrame#sidebar {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #1a1f3a,
+        stop:1 #0d1526
+    );
+    border-right: 2px solid #00d4ff;
+}
+
+QLabel#lbl_title_sidebar {
+    color: #00d4ff;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 15px;
+}
+
+QLabel#lbl_version {
+    color: #6c7a89;
+    font-size: 11px;
+    padding-bottom: 10px;
+}
+
+QLabel#lbl_footer {
+    color: #4a5568;
+    font-size: 9px;
+    padding: 10px;
+}
+
+/* Boutons de la sidebar */
+QFrame#sidebar QPushButton {
+    background-color: transparent;
+    color: #e0e6ed;
+    text-align: left;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    margin: 2px 5px;
+}
+
+QFrame#sidebar QPushButton:hover {
+    background-color: rgba(0, 212, 255, 0.15);
+    color: #00d4ff;
+}
+
+QFrame#sidebar QPushButton:pressed {
+    background-color: rgba(0, 212, 255, 0.3);
+}
+
+/* Bouton actif (appliqué dynamiquement par Python) */
+QFrame#sidebar QPushButton[active="true"] {
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:0,
+        stop:0 #00a8cc,
+        stop:1 #00d4ff
+    );
+    color: white;
+    font-weight: bold;
+    border-left: 4px solid #00ffff;
+}
+
+/* ========================================
+   PAGES PRINCIPALES
+   ======================================== */
+
+QStackedWidget#stacked_pages {
+    background: transparent;
+}
+
+QStackedWidget#stacked_pages > QWidget {
+    background: rgba(10, 14, 39, 0.85);
+    border-radius: 10px;
+    margin: 10px;
+}
+
+/* ========================================
+   TITRES DES PAGES
+   ======================================== */
+
+QLabel#lbl_home_title,
+QLabel#lbl_file_title,
+QLabel#lbl_folder_title,
+QLabel#lbl_ip_title {
+    color: #00d4ff;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+QLabel#lbl_home_subtitle {
+    color: #a0aec0;
+    font-size: 14px;
+    padding: 5px;
+}
+
+QLabel#lbl_home_icon {
+    font-size: 64px;
+}
+
+/* Labels de sections */
+QLabel#lbl_file_log,
+QLabel#lbl_folder_log,
+QLabel#lbl_ip_log,
+QLabel#lbl_file_report,
+QLabel#lbl_folder_report,
+QLabel#lbl_ip_report {
+    color: #00d4ff;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px 0;
+    margin-top: 10px;
+}
+
+/* ========================================
+   FRAMES DE SÉLECTION
+   ======================================== */
+
+QFrame#frame_file_selection,
+QFrame#frame_folder_selection,
+QFrame#frame_ip_selection {
+    background: rgba(26, 31, 58, 0.9);
+    border: 2px solid #00a8cc;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+/* ========================================
+   BOUTONS D'ACTION
+   ======================================== */
+
+/* Boutons de sélection (bleu) */
+QPushButton#btn_select_file,
+QPushButton#btn_select_folder {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #0077b6,
+        stop:1 #005f8e
+    );
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+QPushButton#btn_select_file:hover,
+QPushButton#btn_select_folder:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #0096c7,
+        stop:1 #0077b6
+    );
+}
+
+QPushButton#btn_select_file:pressed,
+QPushButton#btn_select_folder:pressed {
+    background: #005280;
+}
+
+/* Boutons de scan (vert/cyan) */
+QPushButton#btn_scan_file,
+QPushButton#btn_scan_folder,
+QPushButton#btn_scan_ip {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00d4ff,
+        stop:1 #00a8cc
+    );
+    color: #0a0e27;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+QPushButton#btn_scan_file:hover,
+QPushButton#btn_scan_folder:hover,
+QPushButton#btn_scan_ip:hover {
+    background: qlineargradient(
+        x1:0, y1:0, x2:0, y2:1,
+        stop:0 #00ffff,
+        stop:1 #00d4ff
+    );
+}
+
+QPushButton#btn_scan_file:pressed,
+QPushButton#btn_scan_folder:pressed,
+QPushButton#btn_scan_ip:pressed {
+    background: #008fb3;
+}
+
+/* ========================================
+   CHAMPS DE SAISIE
+   ======================================== */
+
+QLineEdit {
+    background-color: rgba(13, 21, 38, 0.8);
+    color: #e0e6ed;
+    border: 2px solid #2d3748;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    selection-background-color: #00a8cc;
+}
+
+QLineEdit:focus {
+    border: 2px solid #00d4ff;
+    background-color: rgba(13, 21, 38, 1);
+}
+
+QLineEdit:read-only {
+    background-color: rgba(26, 31, 58, 0.5);
+    color: #a0aec0;
+}
+
+QLineEdit::placeholder {
+    color: #4a5568;
+}
+
+/* ========================================
+   ZONES DE TEXTE (LOGS & RAPPORTS)
+   ======================================== */
+
+QTextEdit {
+    background-color: rgba(13, 21, 38, 0.9);
+    color: #e0e6ed;
+    border: 2px solid #2d3748;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: "Consolas", "Courier New", monospace;
+    font-size: 11px;
+    selection-background-color: #00a8cc;
+}
+
+QTextEdit:focus {
+    border: 2px solid #00d4ff;
+}
+
+/* Logs : style terminal */
+QTextEdit#txt_file_log,
+QTextEdit#txt_folder_log,
+QTextEdit#txt_ip_log {
+    background-color: rgba(5, 10, 20, 0.95);
+    color: #00ff41;
+    border: 2px solid #00a8cc;
+}
+
+/* Rapports : style professionnel */
+QTextEdit#txt_file_report,
+QTextEdit#txt_folder_report,
+QTextEdit#txt_ip_report {
+    background-color: rgba(26, 31, 58, 0.9);
+    color: #cbd5e0;
+    border: 2px solid #00a8cc;
+}
+
+/* ========================================
+   SCROLLBARS
+   ======================================== */
+
+QScrollBar:vertical {
+    background: rgba(13, 21, 38, 0.5);
+    width: 12px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00a8cc;
+    border-radius: 6px;
+    min-height: 20px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #00d4ff;
+}
+
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical {
+    height: 0px;
+}
+
+QScrollBar:horizontal {
+    background: rgba(13, 21, 38, 0.5);
+    height: 12px;
+    border-radius: 6px;
+}
+
+QScrollBar::handle:horizontal {
+    background: #00a8cc;
+    border-radius: 6px;
+    min-width: 20px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: #00d4ff;
+}
+
+/* ========================================
+   EFFETS SPÉCIAUX
+   ======================================== */
+
+/* Glow effect pour les boutons importants */
+QPushButton#btn_scan_file,
+QPushButton#btn_scan_folder,
+QPushButton#btn_scan_ip {
+    border: 2px solid rgba(0, 255, 255, 0.3);
+}
+
+QPushButton#btn_scan_file:hover,
+QPushButton#btn_scan_folder:hover,
+QPushButton#btn_scan_ip:hover {
+    border: 2px solid rgba(0, 255, 255, 0.6);
+}
+
+
