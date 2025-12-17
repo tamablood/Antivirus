@@ -127,6 +127,19 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="btn_behavior">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>⚡ Comportement</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -499,6 +512,180 @@
           <property name="readOnly">
            <bool>true</bool>
           </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_behavior">
+       <layout class="QVBoxLayout" name="verticalLayout_behavior">
+        <item>
+         <widget class="QLabel" name="lbl_behavior_title">
+          <property name="text">
+           <string>⚡ Analyse Comportementale</string>
+          </property>
+         </widget>
+        </item>
+        
+        <!-- CONFIGURATION GROUP -->
+        <item>
+         <widget class="QGroupBox" name="grp_behavior_config">
+          <property name="title">
+           <string>Configuration &amp; Contrôle</string>
+          </property>
+          <layout class="QVBoxLayout">
+           <item>
+            <layout class="QHBoxLayout">
+             <item>
+              <widget class="QPushButton" name="btn_select_behavior_folder">
+               <property name="text">
+                <string>📂 Choisir Dossier</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="input_behavior_path">
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+               <property name="placeholderText">
+                <string>Dossier cible...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout">
+             <item>
+              <widget class="QPushButton" name="btn_start_behavior">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="text">
+                <string>▶ Démarrer</string>
+               </property>
+               <property name="styleSheet">
+                <string>background-color: #22c55e; color: white; font-weight: bold;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btn_stop_behavior">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>⏹ Arrêter</string>
+               </property>
+               <property name="styleSheet">
+                <string>background-color: #ef4444; color: white; font-weight: bold;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lbl_behavior_status">
+               <property name="text">
+                <string>🔴 Inactif</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+
+        <!-- STATS GROUP -->
+        <item>
+         <widget class="QGroupBox" name="grp_behavior_stats">
+          <property name="title">
+           <string>Statistiques en temps réel</string>
+          </property>
+          <layout class="QHBoxLayout">
+           <item>
+            <widget class="QLabel" name="lbl_stat_created">
+             <property name="text">
+              <string>Créés: 0</string>
+             </property>
+             <property name="styleSheet">
+              <string>font-size: 14px; color: #22c55e; font-weight: bold;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_stat_modified">
+             <property name="text">
+              <string>Modifiés: 0</string>
+             </property>
+             <property name="styleSheet">
+              <string>font-size: 14px; color: #f97316; font-weight: bold;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lbl_stat_deleted">
+             <property name="text">
+              <string>Supprimés: 0</string>
+             </property>
+             <property name="styleSheet">
+              <string>font-size: 14px; color: #ef4444; font-weight: bold;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+
+        <!-- SPLITTER LOGS / ALERTS -->
+        <item>
+         <widget class="QSplitter" name="splitter_behavior">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QWidget" name="layoutWidget_log">
+           <layout class="QVBoxLayout">
+            <item>
+             <widget class="QLabel" name="lbl_behavior_log">
+              <property name="text">
+               <string>📋 Journal d'événements</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTextEdit" name="txt_behavior_log">
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="layoutWidget_alerts">
+           <layout class="QVBoxLayout">
+             <item>
+              <widget class="QLabel" name="lbl_behavior_alerts">
+               <property name="text">
+                <string>🚨 Alertes de sécurité</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QListWidget" name="list_behavior_alerts"/>
+             </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>

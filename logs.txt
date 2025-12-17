@@ -335,3 +335,5 @@
 2025-12-17 16:34:43,499 | INFO | REPUTATION | 185.220.101.1 | Malicious
 2025-12-17 16:36:44,412 | INFO | REPUTATION | 185.220.101.1 | Malicious
 2025-12-17 16:37:46,484 | INFO | FILE_SCAN | C:\Users\USER\Desktop\3IG\git\resume.docx | 2ce0ad49e1b28851ad6de8544fd88b19aacd5e5d477d43606e195aef2485681b | unknown | Hash inconnu de VirusTotal (0 détection connue)
+2025-12-17 23:54:12,399 | WARNING | BEHAVIOR_ALERT: warning - Activité suspecte: 5 fichiers créés en < 10.0s.
+2025-12-17 23:54:24,417 | WARNING | BEHAVIOR_ALERT: critical - ALERTE RANSOMWARE POSSIBL: 5 fichiers supprimés en < 10.0s.
