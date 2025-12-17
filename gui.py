@@ -41,6 +41,8 @@ from PyQt5.QtWidgets import (
 
 from scanner import ScanResult, iter_files_from_paths, scan_paths
 from virustotal import query_domain_reputation, query_hash_sha256, query_ip_reputation
+from behavior_analyzer import BehaviorMonitor
+import time
 
 
 class ScanWorker(QThread):
@@ -112,8 +114,47 @@ class ReputationWorker(QThread):
             self.result.emit(target, status, details)
         except Exception as exc:  # noqa: BLE001
             self.error.emit(str(exc))
+            self.result.emit(target, status, details)
+        except Exception as exc:  # noqa: BLE001
+            self.error.emit(str(exc))
         finally:
             self.finished.emit()
+
+
+class BehaviorWorker(QThread):
+    """Thread de surveillance comportementale."""
+
+    event_detected = pyqtSignal(str)       # message log
+    alert_triggered = pyqtSignal(str, str) # level, message
+    error = pyqtSignal(str)
+
+    def __init__(self, folder: str) -> None:
+        super().__init__()
+        self.monitor = BehaviorMonitor(folder)
+        self._stopped = False
+
+    def run(self) -> None:
+        try:
+            self.monitor.start()
+            while not self._stopped:
+                # Polling loop
+                current = self.monitor.snapshot()
+                diffs = self.monitor.check_diff(current)
+                for d in diffs:
+                    self.event_detected.emit(d)
+
+                alerts = self.monitor.analyze_patterns()
+                for a in alerts:
+                    self.alert_triggered.emit(a.level, a.message)
+
+                time.sleep(1.0)
+        except Exception as exc:  # noqa: BLE001
+            self.error.emit(str(exc))
+        finally:
+            self.monitor.stop()
+
+    def stop(self) -> None:
+        self._stopped = True
 
 
 class MainWindow(QMainWindow):
@@ -123,8 +164,12 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.worker: ScanWorker | None = None
         self.rep_worker: ReputationWorker | None = None
+        self.behavior_worker: BehaviorWorker | None = None
 
         self.current_mode: str | None = None  # "file" | "folder" | None
+        
+        # Stats counters
+        self.stats = {"created": 0, "modified": 0, "deleted": 0}
 
         self._load_ui()
         self._connect_signals()
@@ -156,6 +201,7 @@ class MainWindow(QMainWindow):
         self.btn_file.clicked.connect(lambda: self._navigate(self.page_file, self.btn_file))
         self.btn_folder.clicked.connect(lambda: self._navigate(self.page_folder, self.btn_folder))
         self.btn_ip.clicked.connect(lambda: self._navigate(self.page_ip, self.btn_ip))
+        self.btn_behavior.clicked.connect(lambda: self._navigate(self.page_behavior, self.btn_behavior))
 
         # Actions
         self.btn_select_file.clicked.connect(self.select_file)
@@ -163,9 +209,14 @@ class MainWindow(QMainWindow):
         self.btn_scan_file.clicked.connect(self.start_file_scan)
         self.btn_scan_folder.clicked.connect(self.start_folder_scan)
         self.btn_scan_ip.clicked.connect(self.check_reputation)
+        
+        # Behavior Actions
+        self.btn_select_behavior_folder.clicked.connect(self.select_behavior_folder)
+        self.btn_start_behavior.clicked.connect(self.start_behavior_monitoring)
+        self.btn_stop_behavior.clicked.connect(self.stop_behavior_monitoring)
 
     def _set_active_nav(self, active_btn: QPushButton) -> None:
-        for b in (self.btn_home, self.btn_file, self.btn_folder, self.btn_ip):
+        for b in (self.btn_home, self.btn_file, self.btn_folder, self.btn_ip, self.btn_behavior):
             b.setProperty("active", b is active_btn)
             b.style().unpolish(b)
             b.style().polish(b)
@@ -300,6 +351,96 @@ class MainWindow(QMainWindow):
 
     def _on_reputation_finished(self) -> None:
         self.btn_scan_ip.setEnabled(True)
+
+    # --- Behavior Analyzer -------------------------------------------------------------
+    def select_behavior_folder(self) -> None:
+        folder = QFileDialog.getExistingDirectory(self, "Choisir un dossier à surveiller")
+        if folder:
+            self.input_behavior_path.setText(folder)
+            self.txt_behavior_log.append(f"Dossier cible: {folder}")
+
+    def start_behavior_monitoring(self) -> None:
+        if self.behavior_worker and self.behavior_worker.isRunning():
+            return
+
+        folder = self.input_behavior_path.text().strip()
+        if not folder:
+            QMessageBox.warning(self, "Aucun dossier", "Veuillez choisir un dossier.")
+            return
+
+        self.txt_behavior_log.clear()
+        self.list_behavior_alerts.clear()
+        self.txt_behavior_log.append("Démarrage de la surveillance...")
+        
+        # Reset Stats
+        self.stats = {"created": 0, "modified": 0, "deleted": 0}
+        self._update_stats_ui()
+        self.lbl_behavior_status.setText("🟢 En cours")
+        
+        # UI Toggle
+        self.btn_start_behavior.setEnabled(False)
+        self.btn_stop_behavior.setEnabled(True)
+        self.input_behavior_path.setEnabled(False)
+        self.btn_select_behavior_folder.setEnabled(False)
+
+        self.behavior_worker = BehaviorWorker(folder)
+        self.behavior_worker.event_detected.connect(self._on_behavior_event)
+        self.behavior_worker.alert_triggered.connect(self._on_behavior_alert)
+        self.behavior_worker.error.connect(self._on_behavior_error)
+        self.behavior_worker.start()
+
+    def stop_behavior_monitoring(self) -> None:
+        if self.behavior_worker:
+            self.behavior_worker.stop()
+            self.behavior_worker.wait()
+            self.behavior_worker = None
+        
+        self.txt_behavior_log.append("Surveillance arrêtée.")
+        self.lbl_behavior_status.setText("🔴 Arrêté")
+        
+        self.btn_start_behavior.setEnabled(True)
+        self.btn_stop_behavior.setEnabled(False)
+        self.input_behavior_path.setEnabled(True)
+        self.btn_select_behavior_folder.setEnabled(True)
+
+    def _on_behavior_event(self, message: str) -> None:
+        self.txt_behavior_log.append(message)
+        self.txt_behavior_log.moveCursor(QTextCursor.End)
+        
+        # Update stats
+        if "[CREATION]" in message:
+            self.stats["created"] += 1
+        elif "[SUPPRESSION]" in message:
+            self.stats["deleted"] += 1
+        elif "[MODIFICATION]" in message:
+            self.stats["modified"] += 1
+        self._update_stats_ui()
+
+    def _on_behavior_alert(self, level: str, message: str) -> None:
+        # Add to list widget with color
+        item = QListWidgetItem(f"[{level.upper()}] {message}")
+        if level == "critical":
+            item.setForeground(Qt.white)
+            item.setBackground(Qt.red)
+        else:
+            item.setForeground(Qt.black)
+            item.setBackground(Qt.yellow)
+        
+        self.list_behavior_alerts.addItem(item)
+        self.list_behavior_alerts.scrollToBottom()
+        
+        # Also log
+        logging.warning("BEHAVIOR_ALERT: %s - %s", level, message)
+
+    def _on_behavior_error(self, message: str) -> None:
+        self.txt_behavior_log.append(f"ERREUR: {message}")
+        # Stop everything if error
+        self.stop_behavior_monitoring()
+
+    def _update_stats_ui(self) -> None:
+        self.lbl_stat_created.setText(f"Créés: {self.stats['created']}")
+        self.lbl_stat_deleted.setText(f"Supprimés: {self.stats['deleted']}")
+        self.lbl_stat_modified.setText(f"Modifiés: {self.stats['modified']}")
 
     # --- Helpers -----------------------------------------------------------------------
     def _text_widgets_for_mode(self, mode: str) -> tuple[QTextEdit, QTextEdit]:
